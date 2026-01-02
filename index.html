@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quilt AR Test</title>
+
+  <!-- A-Frame and MindAR (using official CDN from MindAR docs) -->
+  <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image-aframe.prod.js"></script>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <!-- The audio element that will play when the quilt square is detected -->
+  <audio id="quilt-audio" src="audio.mp3" preload="auto"></audio>
+
+  <!-- AR Scene -->
+  <a-scene
+    mindar-image="imageTargetSrc: ./targets.mind;"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: true"
+    renderer="colorManagement: true, physicallyCorrectLights: true"
+    embedded
+  >
+    <!-- Camera required by MindAR -->
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+    <!-- Image target index 0 (first image in your targets.mind file) -->
+    <a-entity mindar-image-target="targetIndex: 0">
+      <!-- You can add any 3D/2D visuals here, e.g. a simple plane -->
+      <a-plane
+        position="0 0 0"
+        rotation="0 0 0"
+        width="1"
+        height="1"
+        color="#FF69B4"
+        opacity="0.4"
+      ></a-plane>
+    </a-entity>
+  </a-scene>
+
+  <script>
+    // Get references
+    const sceneEl = document.querySelector("a-scene");
+    const audioEl = document.getElementById("quilt-audio");
+
+    // Autoplay fix: browsers often require a user gesture before playing audio
+    // This makes sure that after a tap, we are allowed to play.
+    let audioUnlocked = false;
+    const unlockAudio = () => {
+      if (!audioUnlocked) {
+        audioEl.play().then(() => {
+          audioEl.pause();
+          audioEl.currentTime = 0;
+          audioUnlocked = true;
+        }).catch(() => {});
+      }
+    };
+    document.body.addEventListener("click", unlockAudio, { once: true });
+    document.body.addEventListener("touchstart", unlockAudio, { once: true });
+
+    sceneEl.addEventListener("loaded", () => {
+      const arSystem = sceneEl.systems["mindar-image-system"];
+
+      // When target is found, start audio
+      sceneEl.addEventListener("targetFound", () => {
+        if (audioUnlocked) {
+          audioEl.currentTime = 0;
+          audioEl.play();
+        }
+      });
+
+      // When target is lost, pause audio
+      sceneEl.addEventListener("targetLost", () => {
+        audioEl.pause();
+      });
+    });
+  </script>
+</body>
+</html>
