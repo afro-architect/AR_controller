@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Quilt AR Test</title>
+  <title>Controller AR Test</title>
 
   <!-- A-Frame and MindAR (using official CDN from MindAR docs) -->
   <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
@@ -18,8 +18,8 @@
   </style>
 </head>
 <body>
-  <!-- The audio element that will play when the quilt square is detected -->
-  <audio id="quilt-audio" src="audio.mp3" preload="auto"></audio>
+  <!-- The audio element that will play when the controller component is detected -->
+  <audio id="controller-audio" src="audio.mp3" preload="auto"></audio>
 
   <!-- AR Scene -->
   <a-scene
@@ -33,23 +33,101 @@
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
     <!-- Image target index 0 (first image in your targets.mind file) -->
-    <a-entity mindar-image-target="targetIndex: 0">
-      <!-- You can add any 3D/2D visuals here, e.g. a simple plane -->
-      <a-plane
-        position="0 0 0"
-        rotation="0 0 0"
-        width="1"
-        height="1"
-        color="#FF69B4"
-        opacity="0.4"
-      ></a-plane>
-    </a-entity>
+  <a-entity mindar-image-target="targetIndex: 0">
+  <!-- Jog wheel hotspot -->
+  <a-plane position="-0.6 0.2 0" width="0.5" height="0.25" color="#222" opacity="0.8"
+           class="hotspot" id="hs-jog">
+    <a-text value="Jog Wheel" align="center" color="#FFFFFF" width="1.8"></a-text>
+  </a-plane>
+
+  <!-- EQ -->
+  <a-plane position="-0.2 0.25 0" width="0.4" height="0.2" color="#222" opacity="0.8"
+           class="hotspot" id="hs-eq">
+    <a-text value="EQ Section" align="center" color="#FFFFFF" width="1.5"></a-text>
+  </a-plane>
+
+  <!-- Pad modes -->
+  <a-plane position="-0.6 -0.1 0" width="0.4" height="0.2" color="#222" opacity="0.8"
+           class="hotspot" id="hs-pads">
+    <a-text value="Pad Modes" align="center" color="#FFFFFF" width="1.5"></a-text>
+  </a-plane>
+
+ <!-- Tempo slider hotspot -->
+  <a-plane position="-0.9 -0.05 0" width="0.35" height="0.3" color="#222" opacity="0.8"
+           class="hotspot" id="hs-tempo">
+    <a-text value="Tempo" align="center" color="#FFFFFF" width="1.5"></a-text>
+  </a-plane>
+
+  <!-- Cue / transport -->
+  <a-plane position="-0.4 -0.3 0" width="0.4" height="0.2" color="#222" opacity="0.8"
+           class="hotspot" id="hs-cue">
+    <a-text value="Cue & Play" align="center" color="#FFFFFF" width="1.5"></a-text>
+  </a-plane>
+
+  <!-- Crossfader -->
+  <a-plane position="0 -0.35 0" width="0.5" height="0.2" color="#222" opacity="0.8"
+           class="hotspot" id="hs-crossfader">
+    <a-text value="Crossfader" align="center" color="#FFFFFF" width="1.8"></a-text>
+  </a-plane>
+
+  <!-- Master volume -->
+  <a-plane position="0.2 0.4 0" width="0.4" height="0.2" color="#222" opacity="0.8"
+           class="hotspot" id="hs-vol-main">
+    <a-text value="Master Volume" align="center" color="#FFFFFF" width="1.8"></a-text>
+  </a-plane>
+
+  <!-- Headphone volume -->
+  <a-plane position="0.4 0.15 0" width="0.4" height="0.2" color="#222" opacity="0.8"
+           class="hotspot" id="hs-vol-headphones">
+    <a-text value="Headphones" align="center" color="#FFFFFF" width="1.8"></a-text>
+  </a-plane>
+
+  <!-- Stems / part separation -->
+  <a-plane position="0.6 0.1 0" width="0.4" height="0.2" color="#222" opacity="0.8"
+           class="hotspot" id="hs-stems">
+    <a-text value="Stems / Parts" align="center" color="#FFFFFF" width="1.8"></a-text>
+  </a-plane>
+
+  <!-- Slip -->
+  <a-plane position="0.6 -0.1 0" width="0.35" height="0.2" color="#222" opacity="0.8"
+           class="hotspot" id="hs-slip">
+    <a-text value="Slip" align="center" color="#FFFFFF" width="1.5"></a-text>
+  </a-plane>
+
+  <!-- Quantize / misc -->
+  <a-plane position="0.2 -0.05 0" width="0.45" height="0.2" color="#222" opacity="0.8"
+           class="hotspot" id="hs-quantize">
+    <a-text value="Quantize & Timing" align="center" color="#FFFFFF" width="2.0"></a-text>
+  </a-plane>
+</a-entity>
   </a-scene>
 
   <script>
     // Get references
-    const sceneEl = document.querySelector("a-scene");
-    const audioEl = document.getElementById("quilt-audio");
+   const audioJogLeft   = new Audio("jog-left.mp3");
+const audioMixerEQ   = new Audio("mixer-eq.mp3");
+const audioCrossfade = new Audio("crossfader.mp3");
+
+document.addEventListener("DOMContentLoaded", () => {
+  const jogLeftEl   = document.getElementById("jog-left");
+  const mixerEQEl   = document.getElementById("mixer-eq");
+  const crossEl     = document.getElementById("crossfader");
+
+  jogLeftEl.addEventListener("click", () => {
+    audioJogLeft.currentTime = 0;
+    audioJogLeft.play();
+  });
+
+  mixerEQEl.addEventListener("click", () => {
+    audioMixerEQ.currentTime = 0;
+    audioMixerEQ.play();
+  });
+
+  crossEl.addEventListener("click", () => {
+    audioCrossfade.currentTime = 0;
+    audioCrossfade.play();
+  });
+});
 
     // Autoplay fix: browsers often require a user gesture before playing audio
     // This makes sure that after a tap, we are allowed to play.
@@ -82,6 +160,36 @@
         audioEl.pause();
       });
     });
+
+    // One audio per section
+const sounds = {
+  "hs-jog":          new Audio("jog.mp3"),
+  "hs-eq":           new Audio("eq.mp3"),
+  "hs-crossfader":   new Audio("crossfader.mp3"),
+  "hs-pads":         new Audio("pads.mp3"),
+  "hs-tempo":        new Audio("tempo.mp3"),
+  "hs-cue":          new Audio("cue.mp3"),
+  "hs-vol-main":     new Audio("volume-main.mp3"),
+  "hs-vol-headphones": new Audio("volume-headphones.mp3"),
+  "hs-stems":        new Audio("stems.mp3"),
+  "hs-slip":         new Audio("slip.mp3"),
+  "hs-quantize":     new Audio("quantize.mp3"),
+  "hs-mixpoint":     new Audio("mixpoint.mp3"),
+  "hs-call":         new Audio("call.mp3"),
+};
+
+// After DOMContentLoaded in your existing script:
+document.addEventListener("DOMContentLoaded", () => {
+  Object.keys(sounds).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("click", () => {
+      const audio = sounds[id];
+      audio.currentTime = 0;
+      audio.play();
+    });
+  });
+});
   </script>
 </body>
 </html>
