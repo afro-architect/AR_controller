@@ -104,30 +104,9 @@
 
   <script>
     // Get references
-   const audioJogLeft   = new Audio("jog-left.mp3");
-const audioMixerEQ   = new Audio("mixer-eq.mp3");
-const audioCrossfade = new Audio("crossfader.mp3");
+ 
 
-document.addEventListener("DOMContentLoaded", () => {
-  const jogLeftEl   = document.getElementById("jog-left");
-  const mixerEQEl   = document.getElementById("mixer-eq");
-  const crossEl     = document.getElementById("crossfader");
 
-  jogLeftEl.addEventListener("click", () => {
-    audioJogLeft.currentTime = 0;
-    audioJogLeft.play();
-  });
-
-  mixerEQEl.addEventListener("click", () => {
-    audioMixerEQ.currentTime = 0;
-    audioMixerEQ.play();
-  });
-
-  crossEl.addEventListener("click", () => {
-    audioCrossfade.currentTime = 0;
-    audioCrossfade.play();
-  });
-});
 
     // Autoplay fix: browsers often require a user gesture before playing audio
     // This makes sure that after a tap, we are allowed to play.
