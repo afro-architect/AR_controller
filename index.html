@@ -161,17 +161,17 @@ const sounds = {
 };
 
 // After DOMContentLoaded in your existing script:
-document.addEventListener("DOMContentLoaded", () => {
-  Object.keys(sounds).forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.addEventListener("click", () => {
-      const audio = sounds[id];
-      audio.currentTime = 0;
-      audio.play();
-    });
-  });
-});
+//document.addEventListener("DOMContentLoaded", () => {
+  //Object.keys(sounds).forEach(id => {
+   // const el = document.getElementById(id);
+   // if (!el) return;
+   // el.addEventListener("click", () => {
+     // const audio = sounds[id];
+     // audio.currentTime = 0;
+     // audio.play();
+   // });
+ // });
+//});
   </script>
 </body>
 </html>
