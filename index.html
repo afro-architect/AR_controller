@@ -1,39 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Camera Test</title>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>MindAR Minimal Test</title>
 
-  <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image-aframe.prod.js"></script>
+    <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image-aframe.prod.js"></script>
 
-  <style>
-    body, html {
-      margin: 0; padding: 0; overflow: hidden; background: #000;
-    }
-  </style>
-</head>
-<body>
-  <a-scene
-    mindar-image="imageTargetSrc: ./targets.mind; uiScanning: true;"
-    vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: true"
-    embedded
-  >
-    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+    <style>
+      body, html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <a-scene
+      mindar-image="imageTargetSrc: ./targets.mind; uiScanning: true;"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: true"
+      embedded
+    >
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-    <!-- simple test box so we see *something* -->
-    <a-box position="0 0 -2" color="#FF69B4"></a-box>
-  </a-scene>
-
-  <script>
-    window.addEventListener("load", () => {
-      const sceneEl = document.querySelector("a-scene");
-      console.log("scene loaded?", !!sceneEl);
-      sceneEl.addEventListener("loaded", () => {
-        console.log("A-Frame + MindAR scene loaded");
-      });
-    });
-  </script>
-</body>
+      <!-- Show a simple box when the target is found -->
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-box position="0 0 0" depth="0.2" height="0.5" width="0.5" color="#FF69B4"></a-box>
+      </a-entity>
+    </a-scene>
+  </body>
 </html>
