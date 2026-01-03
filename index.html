@@ -110,6 +110,9 @@
 
     // Autoplay fix: browsers often require a user gesture before playing audio
     // This makes sure that after a tap, we are allowed to play.
+
+    const sceneEl = document.querySelector("a-scene");
+const audioEl = document.getElementById("controller-audio");
     let audioUnlocked = false;
     const unlockAudio = () => {
       if (!audioUnlocked) {
