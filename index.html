@@ -103,16 +103,10 @@
   </a-scene>
 
   <script>
-    // Get references
- 
-
-
-
-    // Autoplay fix: browsers often require a user gesture before playing audio
-    // This makes sure that after a tap, we are allowed to play.
-
+  window.addEventListener("load", () => {
     const sceneEl = document.querySelector("a-scene");
-const audioEl = document.getElementById("controller-audio");
+    const audioEl = document.getElementById("controller-audio");
+
     let audioUnlocked = false;
     const unlockAudio = () => {
       if (!audioUnlocked) {
@@ -129,7 +123,6 @@ const audioEl = document.getElementById("controller-audio");
     sceneEl.addEventListener("loaded", () => {
       const arSystem = sceneEl.systems["mindar-image-system"];
 
-      // When target is found, start audio
       sceneEl.addEventListener("targetFound", () => {
         if (audioUnlocked) {
           audioEl.currentTime = 0;
@@ -137,41 +130,37 @@ const audioEl = document.getElementById("controller-audio");
         }
       });
 
-      // When target is lost, pause audio
       sceneEl.addEventListener("targetLost", () => {
         audioEl.pause();
       });
     });
 
-    // One audio per section
-const sounds = {
-  "hs-jog":          new Audio("jog.mp3"),
-  "hs-eq":           new Audio("eq.mp3"),
-  "hs-crossfader":   new Audio("crossfader.mp3"),
-  "hs-pads":         new Audio("pads.mp3"),
-  "hs-tempo":        new Audio("tempo.mp3"),
-  "hs-cue":          new Audio("cue.mp3"),
-  "hs-vol-main":     new Audio("volume-main.mp3"),
-  "hs-vol-headphones": new Audio("volume-headphones.mp3"),
-  "hs-stems":        new Audio("stems.mp3"),
-  "hs-slip":         new Audio("slip.mp3"),
-  "hs-quantize":     new Audio("quantize.mp3"),
-  "hs-mixpoint":     new Audio("mixpoint.mp3"),
-  "hs-call":         new Audio("call.mp3"),
-};
+    const sounds = {
+      "hs-jog":            new Audio("jog.mp3"),
+      "hs-eq":             new Audio("eq.mp3"),
+      "hs-crossfader":     new Audio("crossfader.mp3"),
+      "hs-pads":           new Audio("pads.mp3"),
+      "hs-tempo":          new Audio("tempo.mp3"),
+      "hs-cue":            new Audio("cue.mp3"),
+      "hs-vol-main":       new Audio("volume-main.mp3"),
+      "hs-vol-headphones": new Audio("volume-headphones.mp3"),
+      "hs-stems":          new Audio("stems.mp3"),
+      "hs-slip":           new Audio("slip.mp3"),
+      "hs-quantize":       new Audio("quantize.mp3"),
+      "hs-mixpoint":       new Audio("mixpoint.mp3"),
+      "hs-call":           new Audio("call.mp3"),
+    };
 
-// After DOMContentLoaded in your existing script:
-//document.addEventListener("DOMContentLoaded", () => {
-  //Object.keys(sounds).forEach(id => {
-   // const el = document.getElementById(id);
-   // if (!el) return;
-   // el.addEventListener("click", () => {
-     // const audio = sounds[id];
-     // audio.currentTime = 0;
-     // audio.play();
-   // });
- // });
-//});
-  </script>
+    Object.keys(sounds).forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("click", () => {
+        const audio = sounds[id];
+        audio.currentTime = 0;
+        audio.play();
+      });
+    });
+  });
+</script>
 </body>
 </html>
